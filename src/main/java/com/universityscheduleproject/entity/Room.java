@@ -1,5 +1,6 @@
 package com.universityscheduleproject.entity;
 
+import com.universityscheduleproject.dto.room.RoomDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,4 +20,12 @@ public class Room {
     private String floor;
     @Column(name = "capacity")
     private Integer capacity;
+
+    public static Room toEntity(RoomDTO roomDTO) {
+        Room room = new Room();
+        room.setRoomNumber(roomDTO.getRoomNumber());
+        room.setFloor(roomDTO.getFloor());
+        room.setCapacity(roomDTO.getCapacity());
+        return room;
+    }
 }

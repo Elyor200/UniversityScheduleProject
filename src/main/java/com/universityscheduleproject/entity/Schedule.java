@@ -1,5 +1,7 @@
 package com.universityscheduleproject.entity;
 
+import com.universityscheduleproject.dto.ScheduleResponseDTO;
+import com.universityscheduleproject.dto.professor.ProfessorDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,4 +30,15 @@ public class Schedule {
     @ManyToOne
     @JoinColumn(name = "professor_id", nullable = false)
     private Professor professor;
+
+    public static Schedule toEntity(ScheduleResponseDTO responseDTO) {
+        Schedule schedule = new Schedule();
+        schedule.setDayOfWeek(responseDTO.getDayOfWeek());
+        schedule.setStartTime(responseDTO.getStartTime());
+        schedule.setEndTime(responseDTO.getEndTime());
+        schedule.setCourse(Course.toEntity(responseDTO.getCourseDTO()));
+        schedule.setRoom(Room.toEntity(responseDTO.getRoomDTO()));
+        schedule.setProfessor(Professor.toEntity(responseDTO.getProfessorDTO()));
+        return schedule;
+    }
 }

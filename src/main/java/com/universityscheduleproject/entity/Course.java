@@ -1,5 +1,6 @@
 package com.universityscheduleproject.entity;
 
+import com.universityscheduleproject.dto.course.CourseDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,4 +23,13 @@ public class Course {
     @ManyToOne
     @JoinColumn(name = "professor_id", nullable = false)
     private Professor professor;
+
+    public static Course toEntity(CourseDTO courseDTO) {
+        Course course = new Course();
+        course.setCourseName(courseDTO.getCourseName());
+        course.setCourseCode(courseDTO.getCourseCode());
+        course.setCreditHours(courseDTO.getCreditHours());
+        course.setProfessor(Professor.toEntity(courseDTO.getProfessorDTO()));
+        return course;
+    }
 }
