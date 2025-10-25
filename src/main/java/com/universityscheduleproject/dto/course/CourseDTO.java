@@ -19,7 +19,7 @@ public class CourseDTO {
                      @JsonProperty("course_name") String courseName,
                      @JsonProperty("course_code") String courseCode,
                      @JsonProperty("credit_hours") Integer creditHours,
-                     @JsonProperty("professor_dto") ProfessorDTO professorDTO) {
+                     @JsonProperty("professor") ProfessorDTO professorDTO) {
         this.courseId = courseId;
         this.courseName = courseName;
         this.courseCode = courseCode;

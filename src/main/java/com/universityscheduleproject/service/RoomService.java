@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.function.support.RouterFunctionMapping;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,5 +30,23 @@ public class RoomService {
         room.setFloor(request.getFloor());
         roomRepository.save(room);
         return RoomDTO.fromEntity(room);
+    }
+
+    public List<RoomDTO> getAllRooms() {
+        List<RoomDTO> roomDTOList = new ArrayList<>();
+        List<Room> rooms = roomRepository.findAll();
+        for (Room room : rooms) {
+            RoomDTO roomDTO = RoomDTO.fromEntity(room);
+            roomDTOList.add(roomDTO);
+        }
+        return roomDTOList;
+    }
+
+    public RoomDTO getRoomById(Long id) {
+        Optional<Room> optionalRoom = roomRepository.findById(id);
+        if (!optionalRoom.isPresent()) {
+            throw new RuntimeException("Room does not exist");
+        }
+        return RoomDTO.fromEntity(optionalRoom.get());
     }
 }

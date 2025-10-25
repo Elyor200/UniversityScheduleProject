@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.universityscheduleproject.entity.Schedule.toEntity;
 
 @Service
 @AllArgsConstructor
@@ -72,5 +71,52 @@ public class ScheduleService {
             responseDTOList.add(responseDTO);
         }
         return responseDTOList;
+    }
+
+    public List<ScheduleResponseDTO> getAllSchedulesByProfessorId(Long id) {
+        List<ScheduleResponseDTO> responseDTOList = new ArrayList<>();
+        List<Schedule> scheduleList = scheduleRepository.findByProfessorId(id);
+        for (Schedule schedule : scheduleList) {
+            ScheduleResponseDTO responseDTO = ScheduleResponseDTO.fromEntity(schedule);
+            responseDTOList.add(responseDTO);
+        }
+        return responseDTOList;
+    }
+
+    public List<ScheduleResponseDTO> getAllSchedulesByCourseId(Long id) {
+        List<ScheduleResponseDTO> responseDTOList = new ArrayList<>();
+        List<Schedule> scheduleList = scheduleRepository.findByCourseId(id);
+        for (Schedule schedule : scheduleList) {
+            ScheduleResponseDTO responseDTO = ScheduleResponseDTO.fromEntity(schedule);
+            responseDTOList.add(responseDTO);
+        }
+        return responseDTOList;
+    }
+
+    public List<ScheduleResponseDTO> getAllSchedulesByRoomId(Long id) {
+        List<ScheduleResponseDTO> responseDTOList = new ArrayList<>();
+        List<Schedule> scheduleList = scheduleRepository.findByRoomId(id);
+        for (Schedule schedule : scheduleList) {
+            ScheduleResponseDTO responseDTO = ScheduleResponseDTO.fromEntity(schedule);
+            responseDTOList.add(responseDTO);
+        }
+        return responseDTOList;
+    }
+
+    public List<ScheduleResponseDTO> getAllSchedulesByDayOfWeek(String dayOfWeek) {
+        List<ScheduleResponseDTO> responseDTOList = new ArrayList<>();
+        List<Schedule> scheduleList = scheduleRepository.findByDayOfWeek(dayOfWeek);
+        for (Schedule schedule : scheduleList) {
+            ScheduleResponseDTO responseDTO = ScheduleResponseDTO.fromEntity(schedule);
+            responseDTOList.add(responseDTO);
+        }
+        return responseDTOList;
+    }
+
+    public boolean deleteSchedule(Long id) {
+        Schedule schedule = scheduleRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Schedule not found!"));
+        scheduleRepository.delete(schedule);
+        return true;
     }
 }

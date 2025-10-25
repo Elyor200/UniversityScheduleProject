@@ -5,10 +5,9 @@ import com.universityscheduleproject.dto.course.CourseRequestDTO;
 import com.universityscheduleproject.service.CourseService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -24,5 +23,17 @@ public class CourseController {
         } catch (Exception e) {
             return ResponseEntity.ok(e.getMessage());
         }
+    }
+
+    @GetMapping("/getAllCourses")
+    public ResponseEntity<?> getAllCourses() {
+        List<CourseDTO> allCourses = courseService.getAllCourses();
+        return ResponseEntity.ok(allCourses);
+    }
+
+    @GetMapping("/getCourseById")
+    public ResponseEntity<?> getCourseById(@RequestParam Long courseId) {
+        CourseDTO courseDTO = courseService.getCourseById(courseId);
+        return ResponseEntity.ok(courseDTO);
     }
 }

@@ -30,4 +30,30 @@ public class ScheduleController {
         List<ScheduleResponseDTO> allSchedules = scheduleService.getAllSchedules();
         return ResponseEntity.ok(allSchedules);
     }
+
+    @GetMapping("/getAllSchedulesByProfessorId")
+    private ResponseEntity<?> getAllSchedulesByProfessorId(Long professorId) {
+        return ResponseEntity.ok(scheduleService.getAllSchedulesByProfessorId(professorId));
+    }
+
+    @GetMapping("/getAllSchedulesByCourseId")
+    private ResponseEntity<?> getAllSchedulesByCourseId(@RequestParam("courseId") Long courseId) {
+        return ResponseEntity.ok(scheduleService.getAllSchedulesByCourseId(courseId));
+    }
+
+    @GetMapping("/getAllSchedulesByRoomId")
+    private ResponseEntity<?> getAllSchedulesByRoomId(@RequestParam("roomId") Long roomId) {
+        return ResponseEntity.ok(scheduleService.getAllSchedulesByRoomId(roomId));
+    }
+
+    @GetMapping("/getAllSchedulesByDayOfWeek")
+    private ResponseEntity<?> getAllSchedulesByDayOfWeek(@RequestParam("dayOfWeek") String dayOfWeek) {
+        return ResponseEntity.ok(scheduleService.getAllSchedulesByDayOfWeek(dayOfWeek));
+    }
+
+    @DeleteMapping("/deleteScheduleById")
+    private ResponseEntity<?> deleteScheduleById(@RequestParam("id") Long id) {
+        boolean b = scheduleService.deleteSchedule(id);
+        return ResponseEntity.ok(b);
+    }
 }

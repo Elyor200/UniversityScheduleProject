@@ -10,6 +10,8 @@ import com.universityscheduleproject.repository.ProfessorRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -34,5 +36,23 @@ public class CourseService {
         courseRepository.save(course);
 
         return CourseDTO.fromEntity(course);
+    }
+
+    public List<CourseDTO> getAllCourses() {
+        List<CourseDTO> courseDTOList = new ArrayList<>();
+        List<Course> courseList = courseRepository.findAll();
+        for (Course course : courseList) {
+            CourseDTO courseDTO = CourseDTO.fromEntity(course);
+            courseDTOList.add(courseDTO);
+        }
+        return courseDTOList;
+    }
+
+    public CourseDTO getCourseById(Long id) {
+        Optional<Course> optionalCourse = courseRepository.findById(id);
+        if (!optionalCourse.isPresent()) {
+            throw new RuntimeException("Course not found!");
+        }
+        return CourseDTO.fromEntity(optionalCourse.get());
     }
 }
