@@ -32,7 +32,7 @@ public class ScheduleController {
     }
 
     @GetMapping("/getAllSchedulesByProfessorId")
-    private ResponseEntity<?> getAllSchedulesByProfessorId(Long professorId) {
+    private ResponseEntity<?> getAllSchedulesByProfessorId(@RequestParam Long professorId) {
         return ResponseEntity.ok(scheduleService.getAllSchedulesByProfessorId(professorId));
     }
 
@@ -49,6 +49,11 @@ public class ScheduleController {
     @GetMapping("/getAllSchedulesByDayOfWeek")
     private ResponseEntity<?> getAllSchedulesByDayOfWeek(@RequestParam("dayOfWeek") String dayOfWeek) {
         return ResponseEntity.ok(scheduleService.getAllSchedulesByDayOfWeek(dayOfWeek));
+    }
+
+    @GetMapping("/getAllSchedulesByStudentId")
+    private ResponseEntity<?> getAllSchedulesByStudentId(@RequestParam("studentId") Long studentId) {
+        return ResponseEntity.ok(scheduleService.getAllSchedulesByStudentId(studentId));
     }
 
     @DeleteMapping("/deleteScheduleById")

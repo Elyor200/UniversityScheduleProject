@@ -14,19 +14,22 @@ public class StudentResponseDTO {
     private String email;
     private String phoneNumber;
     private String major;
+//    private String password;
 
     public StudentResponseDTO(@JsonProperty("student_id") String studentId,
                               @JsonProperty("first_name") String firstName,
                               @JsonProperty("last_name") String lastName,
                               @JsonProperty("email") String email,
                               @JsonProperty("phone_number") String phoneNumber,
-                              @JsonProperty("major") String major) {
+                              @JsonProperty("major") String major,
+                              @JsonProperty("password") String password) {
         this.studentId = studentId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.major = major;
+//        this.password = password;
     }
 
     public static StudentResponseDTO fromEntity(Student student) {
@@ -37,6 +40,7 @@ public class StudentResponseDTO {
         dto.setEmail(student.getEmail());
         dto.setPhoneNumber(student.getPhoneNumber());
         dto.setMajor(student.getMajor());
+//        dto.setPassword(student.getPassword());
         return dto;
     }
 }

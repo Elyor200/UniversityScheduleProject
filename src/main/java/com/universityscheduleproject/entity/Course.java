@@ -4,6 +4,9 @@ import com.universityscheduleproject.dto.course.CourseDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -23,6 +26,8 @@ public class Course {
     @ManyToOne
     @JoinColumn(name = "professor_id", nullable = false)
     private Professor professor;
+    @ManyToMany(mappedBy = "courses")
+    private List<Student> students = new ArrayList<>();
 
     public static Course toEntity(CourseDTO courseDTO) {
         Course course = new Course();

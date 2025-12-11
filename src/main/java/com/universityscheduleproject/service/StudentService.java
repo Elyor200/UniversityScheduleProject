@@ -5,6 +5,7 @@ import com.universityscheduleproject.dto.student.StudentResponseDTO;
 import com.universityscheduleproject.entity.Student;
 import com.universityscheduleproject.repository.StudentRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class StudentService {
     private StudentRepository studentRepository;
+    private PasswordEncoder passwordEncoder;
 
     public StudentResponseDTO registerStudent(StudentRequestDTO studentRequestDTO) {
         Optional<Student> optionalStudent = studentRepository.findByEmail(studentRequestDTO.getEmail());
@@ -28,6 +30,8 @@ public class StudentService {
         student.setEmail(studentRequestDTO.getEmail());
         student.setMajor(studentRequestDTO.getMajor());
         student.setPhoneNumber(studentRequestDTO.getPhoneNumber());
+        student.setPassword(passwordEncoder.encode(studentRequestDTO.getPassword()));
+        student.setRole("STUDENT");
         studentRepository.save(student);
 
         return StudentResponseDTO.fromEntity(student);

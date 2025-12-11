@@ -5,6 +5,7 @@ import com.universityscheduleproject.dto.professor.ProfessorRequestDTO;
 import com.universityscheduleproject.entity.Professor;
 import com.universityscheduleproject.repository.ProfessorRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class ProfessorService {
     private ProfessorRepository professorRepository;
+    private PasswordEncoder passwordEncoder;
 
     public ProfessorDTO createProfessor(ProfessorRequestDTO requestDTO) {
         Optional<Professor> optionalProfessor = professorRepository.findByEmailAndFirstNameAndLastName
@@ -27,6 +29,8 @@ public class ProfessorService {
         professorDTO.setEmail(requestDTO.getEmail());
         professorDTO.setFirstName(requestDTO.getFirstName());
         professorDTO.setLastName(requestDTO.getLastName());
+        professorDTO.setPassword(passwordEncoder.encode(requestDTO.getPassword()));
+        professorDTO.setRole("PROFESSOR");
 
         Professor professor = Professor.toEntity(professorDTO);
         professorRepository.save(professor);

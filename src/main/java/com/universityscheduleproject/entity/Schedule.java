@@ -1,7 +1,6 @@
 package com.universityscheduleproject.entity;
 
 import com.universityscheduleproject.dto.ScheduleResponseDTO;
-import com.universityscheduleproject.dto.professor.ProfessorDTO;
 import jakarta.persistence.*;
 import lombok.*;
 

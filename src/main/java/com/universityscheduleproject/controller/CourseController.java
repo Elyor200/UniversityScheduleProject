@@ -2,6 +2,7 @@ package com.universityscheduleproject.controller;
 
 import com.universityscheduleproject.dto.course.CourseDTO;
 import com.universityscheduleproject.dto.course.CourseRequestDTO;
+import com.universityscheduleproject.dto.course.EnrollRequestDTO;
 import com.universityscheduleproject.service.CourseService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -35,5 +36,21 @@ public class CourseController {
     public ResponseEntity<?> getCourseById(@RequestParam Long courseId) {
         CourseDTO courseDTO = courseService.getCourseById(courseId);
         return ResponseEntity.ok(courseDTO);
+    }
+
+    @GetMapping("/getAllCoursesByProfessorIdAndEmail")
+    public ResponseEntity<?> getAllCoursesByProfessorIdAndEmail(@RequestParam Long professorId,
+                                                                @RequestParam String email) {
+        return ResponseEntity.ok(courseService.getAllCourseByProfessorIdAndEmail(professorId, email));
+    }
+
+    @PostMapping("/enroll-to-course")
+    public ResponseEntity<?> enrollToCourse(@RequestBody EnrollRequestDTO enrollRequestDTO) {
+        return ResponseEntity.ok(courseService.enrollToCourse(enrollRequestDTO));
+    }
+
+    @GetMapping("/getEnrolledCoursesByStudentId")
+    public ResponseEntity<?> getEnrolledCoursesByStudentId(@RequestParam String studentId) {
+        return ResponseEntity.ok(courseService.getAllCoursesByStudentId(studentId));
     }
 }

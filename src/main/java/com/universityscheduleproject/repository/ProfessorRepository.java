@@ -10,4 +10,5 @@ public interface ProfessorRepository extends JpaRepository<Professor, Long> {
 
     Optional<Professor> findByEmailAndFirstNameAndLastName(String email, String firstName, String lastName);
 
+
 }

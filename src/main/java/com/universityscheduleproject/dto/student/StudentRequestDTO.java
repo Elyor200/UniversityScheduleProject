@@ -13,6 +13,7 @@ public class StudentRequestDTO {
     private String email;
     private String major;
     private String phoneNumber;
+    private String password;
 
 //    public StudentRequestDTO(@JsonProperty("first_name") String firstName,
 //                             @JsonProperty("last_name") String lastName,

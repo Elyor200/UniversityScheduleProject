@@ -3,6 +3,8 @@ package com.universityscheduleproject.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 @Entity
@@ -27,6 +29,17 @@ public class Student {
     private String major;
     @Column(name = "phone_number")
     private String phoneNumber;
+    @Column(name = "password")
+    private String password;
+    @Column(name = "role")
+    private String role;
+    @ManyToMany
+    @JoinTable(
+            name = "student_course",
+            joinColumns = @JoinColumn(name = "student_id"),
+            inverseJoinColumns = @JoinColumn(name = "course_id")
+    )
+    private List<Course> courses = new ArrayList<>();
 
     @PrePersist
     public void prePersist() {

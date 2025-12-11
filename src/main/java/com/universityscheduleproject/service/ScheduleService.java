@@ -113,6 +113,16 @@ public class ScheduleService {
         return responseDTOList;
     }
 
+    public List<ScheduleResponseDTO> getAllSchedulesByStudentId(Long studentId) {
+        List<Schedule> allSchedulesByStudentId = scheduleRepository.getAllSchedulesByStudentId(studentId);
+        List<ScheduleResponseDTO> responseDTOList = new ArrayList<>();
+        for (Schedule schedule : allSchedulesByStudentId) {
+            ScheduleResponseDTO responseDTO = ScheduleResponseDTO.fromEntity(schedule);
+            responseDTOList.add(responseDTO);
+        }
+        return responseDTOList;
+    }
+
     public boolean deleteSchedule(Long id) {
         Schedule schedule = scheduleRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Schedule not found!"));

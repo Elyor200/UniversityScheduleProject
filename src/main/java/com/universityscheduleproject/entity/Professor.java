@@ -20,12 +20,19 @@ public class Professor {
     private String lastName;
     @Column(name = "email", nullable = false)
     private String email;
+    @Column(name = "password")
+    private String password;
+    @Column(name = "role")
+    private String role;
+    @ManyToMany()
 
     public static Professor toEntity(ProfessorDTO professorDTO) {
         Professor professor = new Professor();
         professor.setFirstName(professorDTO.getFirstName());
         professor.setLastName(professorDTO.getLastName());
         professor.setEmail(professorDTO.getEmail());
+        professor.setPassword(professorDTO.getPassword());
+        professor.setRole(professorDTO.getRole());
         return professor;
     }
 }
