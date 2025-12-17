@@ -33,6 +33,10 @@ public class Student {
     private String password;
     @Column(name = "role")
     private String role;
+
+    @OneToMany(mappedBy = "student")
+    private List<Enrollment> enrollments = new ArrayList<>();
+
     @ManyToMany
     @JoinTable(
             name = "student_course",

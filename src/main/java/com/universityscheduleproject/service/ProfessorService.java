@@ -54,4 +54,14 @@ public class ProfessorService {
         }
         return ProfessorDTO.fromEntity(optionalProfessor.get());
     }
+
+    public List<ProfessorDTO> getAllProfessorsByStudentId(Long studentId) {
+        List<ProfessorDTO> professorDTOList = new ArrayList<>();
+        List<Professor> allProfessorsByStudentId = professorRepository.getAllProfessorsByStudentId(studentId);
+        for (Professor professor : allProfessorsByStudentId) {
+            ProfessorDTO professorDTO = ProfessorDTO.fromEntity(professor);
+            professorDTOList.add(professorDTO);
+        }
+        return professorDTOList;
+    }
 }

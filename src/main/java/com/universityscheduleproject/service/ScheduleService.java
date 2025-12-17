@@ -5,14 +5,8 @@ import com.universityscheduleproject.dto.ScheduleResponseDTO;
 import com.universityscheduleproject.dto.course.CourseDTO;
 import com.universityscheduleproject.dto.professor.ProfessorDTO;
 import com.universityscheduleproject.dto.room.RoomDTO;
-import com.universityscheduleproject.entity.Course;
-import com.universityscheduleproject.entity.Professor;
-import com.universityscheduleproject.entity.Room;
-import com.universityscheduleproject.entity.Schedule;
-import com.universityscheduleproject.repository.CourseRepository;
-import com.universityscheduleproject.repository.ProfessorRepository;
-import com.universityscheduleproject.repository.RoomRepository;
-import com.universityscheduleproject.repository.ScheduleRepository;
+import com.universityscheduleproject.entity.*;
+import com.universityscheduleproject.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +21,7 @@ public class ScheduleService {
     private CourseRepository courseRepository;
     private ProfessorRepository professorRepository;
     private RoomRepository roomRepository;
+    private EnrollmentRepository enrollmentRepository;
 
     public ScheduleResponseDTO createSchedule(ScheduleRequestDTO requestDTO) {
         Course course = courseRepository.findById(requestDTO.getCourseId())
@@ -114,10 +109,13 @@ public class ScheduleService {
     }
 
     public List<ScheduleResponseDTO> getAllSchedulesByStudentId(Long studentId) {
-        List<Schedule> allSchedulesByStudentId = scheduleRepository.getAllSchedulesByStudentId(studentId);
+//        List<Schedule> allSchedulesByStudentId = scheduleRepository.getAllSchedulesByStudentId(studentId);
+        List<Enrollment> enrollmentList = enrollmentRepository.findByStudentId(studentId);
         List<ScheduleResponseDTO> responseDTOList = new ArrayList<>();
-        for (Schedule schedule : allSchedulesByStudentId) {
+        for (Enrollment enrollment : enrollmentList) {
+            Schedule schedule = enrollment.getSchedule();
             ScheduleResponseDTO responseDTO = ScheduleResponseDTO.fromEntity(schedule);
+            responseDTO.setEnrolledAt(enrollment.getEnrolledAt());
             responseDTOList.add(responseDTO);
         }
         return responseDTOList;

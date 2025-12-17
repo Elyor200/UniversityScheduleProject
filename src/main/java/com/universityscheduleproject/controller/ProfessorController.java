@@ -32,4 +32,9 @@ public class ProfessorController {
         ProfessorDTO professor = professorService.getProfessorById(id);
         return ResponseEntity.ok(professor);
     }
+
+    @GetMapping("/getAllProfessorsByStudentId")
+    public ResponseEntity<?> getAllProfessorsByStudentId(@RequestParam Long studentId) {
+        return ResponseEntity.ok(professorService.getAllProfessorsByStudentId(studentId));
+    }
 }

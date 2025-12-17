@@ -24,10 +24,10 @@ public class Professor {
     private String password;
     @Column(name = "role")
     private String role;
-    @ManyToMany()
 
     public static Professor toEntity(ProfessorDTO professorDTO) {
         Professor professor = new Professor();
+        professor.setId(professorDTO.getProfessorId());
         professor.setFirstName(professorDTO.getFirstName());
         professor.setLastName(professorDTO.getLastName());
         professor.setEmail(professorDTO.getEmail());

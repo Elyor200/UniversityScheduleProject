@@ -1,19 +1,15 @@
 package com.universityscheduleproject.service;
 
-import com.universityscheduleproject.dto.course.CourseDTO;
-import com.universityscheduleproject.dto.course.CourseRequestDTO;
-import com.universityscheduleproject.dto.course.EnrollRequestDTO;
-import com.universityscheduleproject.dto.course.EnrollResponseDTO;
+import com.universityscheduleproject.dto.course.*;
 import com.universityscheduleproject.dto.student.StudentResponseDTO;
-import com.universityscheduleproject.entity.Course;
-import com.universityscheduleproject.entity.Professor;
-import com.universityscheduleproject.entity.Student;
-import com.universityscheduleproject.repository.CourseRepository;
-import com.universityscheduleproject.repository.ProfessorRepository;
-import com.universityscheduleproject.repository.StudentRepository;
+import com.universityscheduleproject.entity.*;
+import com.universityscheduleproject.repository.*;
 import lombok.AllArgsConstructor;
+import org.springframework.core.ReactiveAdapter;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +17,8 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class CourseService {
+    private final ScheduleRepository scheduleRepository;
+    private final EnrollmentRepository enrollmentRepository;
     private CourseRepository courseRepository;
     private StudentRepository studentRepository;
     private ProfessorRepository professorRepository;
@@ -43,26 +41,45 @@ public class CourseService {
         return CourseDTO.fromEntity(course);
     }
 
-    public EnrollResponseDTO enrollToCourse(EnrollRequestDTO requestDTO) {
-        Student student = studentRepository.getStudentByStudentId(requestDTO.getStudentId()).orElseThrow(() ->
+    public ResponseMessage enrollToCourse(EnrollRequestDTO requestDTO) {
+        Student student = studentRepository.getStudentById(requestDTO.getStudentId()).orElseThrow(() ->
                 new IllegalStateException("Student does not exist"));
-        Course course = courseRepository.findByCourseName(requestDTO.getCourseName()).orElseThrow(() ->
-                new IllegalStateException("Course does not exist"));
 
+        Schedule schedule = scheduleRepository.findById(requestDTO.getScheduleId()).orElseThrow(() ->
+                new IllegalStateException("Schedule does not exist"));
 
-        if (student.getCourses().contains(course)) {
-            throw new IllegalStateException("Student already enrolled in the course");
+        if (enrollmentRepository.existsByStudentAndSchedule(student, schedule)) {
+            throw new RuntimeException("Student already enrolled in this schedule");
         }
 
-        student.getCourses().add(course);
-        course.getStudents().add(student);
-        studentRepository.save(student);
+        List<Enrollment> byStudentId = enrollmentRepository.findByStudentId(requestDTO.getStudentId());
+        for (Enrollment enrollment : byStudentId) {
+            Schedule s = enrollment.getSchedule();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H:mm");
 
-        EnrollResponseDTO responseDTO = EnrollResponseDTO.fromEntity(course);
-        StudentResponseDTO studentResponseDTO = StudentResponseDTO.fromEntity(student);
-        responseDTO.setStudent(studentResponseDTO);
+            LocalTime existingStart = LocalTime.parse(s.getStartTime(), formatter);
+            LocalTime existingEnd   = LocalTime.parse(s.getEndTime(), formatter);
+            LocalTime newStart      = LocalTime.parse(schedule.getStartTime(), formatter);
+            LocalTime newEnd        = LocalTime.parse(schedule.getEndTime(), formatter);
 
-        return responseDTO;
+            boolean timeOverlap = existingStart.isBefore(newEnd) && existingEnd.isAfter(newStart);
+
+            if (s.getDayOfWeek().equals(schedule.getDayOfWeek()) && timeOverlap) {
+                throw new RuntimeException("Schedule conflict with another enrolled course");
+            }
+
+            if (newEnd.isBefore(newStart) || newEnd.equals(newStart)) {
+                throw new IllegalArgumentException("End time must be after start time");
+            }
+        }
+
+        Enrollment enrollment = new Enrollment();
+        enrollment.setSchedule(schedule);
+        enrollment.setStudent(student);
+        enrollment.setCourse(schedule.getCourse());
+        enrollmentRepository.save(enrollment);
+
+        return new ResponseMessage("Enroll success");
     }
 
     public List<CourseDTO> getAllCourses() {
@@ -93,10 +110,13 @@ public class CourseService {
         return courseDTOList;
     }
 
-    public List<CourseDTO> getAllCoursesByStudentId(String studentId) {
-        List<Course> allCoursesByStudentId = courseRepository.getAllCoursesByStudentId(studentId);
+    public List<CourseDTO> getAllCoursesByStudentId(Long studentId) {
+        List<Enrollment> allCoursesByStudentId = enrollmentRepository.getAllEnrollmentsByStudentId(studentId);
         List<CourseDTO> courseDTOList = new ArrayList<>();
-        for (Course course: allCoursesByStudentId) {
+        for (Enrollment enrollment : allCoursesByStudentId) {
+            Course course = enrollment.getCourse();
+            Schedule schedule = enrollment.getSchedule();
+
             CourseDTO courseDTO = CourseDTO.fromEntity(course);
             courseDTOList.add(courseDTO);
         }

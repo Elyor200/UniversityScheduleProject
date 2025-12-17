@@ -54,4 +54,14 @@ public class StudentService {
         }
         return students;
     }
+
+    public List<StudentResponseDTO> getAllStudentsByProfessorId(Long professorId) {
+        List<StudentResponseDTO> students = new ArrayList<>();
+        List<Student> allStudentsByProfessorId = studentRepository.getAllStudentsByProfessorId(professorId);
+        for (Student student : allStudentsByProfessorId) {
+            StudentResponseDTO dto = StudentResponseDTO.fromEntity(student);
+            students.add(dto);
+        }
+        return students;
+    }
 }

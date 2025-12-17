@@ -3,12 +3,14 @@ package com.universityscheduleproject.controller;
 import com.universityscheduleproject.dto.course.CourseDTO;
 import com.universityscheduleproject.dto.course.CourseRequestDTO;
 import com.universityscheduleproject.dto.course.EnrollRequestDTO;
+import com.universityscheduleproject.dto.course.ResponseMessage;
 import com.universityscheduleproject.service.CourseService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 
 @RestController
 @AllArgsConstructor
@@ -45,12 +47,13 @@ public class CourseController {
     }
 
     @PostMapping("/enroll-to-course")
-    public ResponseEntity<?> enrollToCourse(@RequestBody EnrollRequestDTO enrollRequestDTO) {
-        return ResponseEntity.ok(courseService.enrollToCourse(enrollRequestDTO));
+    public ResponseEntity<ResponseMessage> enrollToCourse(@RequestBody EnrollRequestDTO enrollRequestDTO) {
+        ResponseMessage responseMessage = courseService.enrollToCourse(enrollRequestDTO);
+        return ResponseEntity.ok(responseMessage);
     }
 
     @GetMapping("/getEnrolledCoursesByStudentId")
-    public ResponseEntity<?> getEnrolledCoursesByStudentId(@RequestParam String studentId) {
+    public ResponseEntity<?> getEnrolledCoursesByStudentId(@RequestParam Long studentId) {
         return ResponseEntity.ok(courseService.getAllCoursesByStudentId(studentId));
     }
 }

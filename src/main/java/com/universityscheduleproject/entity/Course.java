@@ -28,6 +28,10 @@ public class Course {
     private Professor professor;
     @ManyToMany(mappedBy = "courses")
     private List<Student> students = new ArrayList<>();
+    @OneToMany(mappedBy = "course")
+    private List<Enrollment> enrollments = new ArrayList<>();
+    @OneToMany(mappedBy = "course")
+    private List<Schedule> schedules;
 
     public static Course toEntity(CourseDTO courseDTO) {
         Course course = new Course();

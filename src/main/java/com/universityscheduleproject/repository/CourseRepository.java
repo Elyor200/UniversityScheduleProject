@@ -1,6 +1,7 @@
 package com.universityscheduleproject.repository;
 
 import com.universityscheduleproject.entity.Course;
+import com.universityscheduleproject.entity.Enrollment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,4 +16,15 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
 
     @Query("SELECT s.courses FROM Student s WHERE s.studentId = :studentId")
     List<Course> getAllCoursesByStudentId(@Param("studentId") String studentId);
+
+//    @Query("""
+//    SELECT e.course
+//    FROM Enrollment e
+//    JOIN e.student s
+//    JOIN e.schedule ch
+//    WHERE s.id = :studentId and e.schedule != ch.id
+//""")
+//    List<Course> getAllCoursesByStudentIdV2(@Param("studentId") Long studentId);
+
+
 }

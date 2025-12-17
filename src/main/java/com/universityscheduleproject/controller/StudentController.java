@@ -29,4 +29,9 @@ public class StudentController {
     public ResponseEntity<?> getAllStudents() {
         return ResponseEntity.ok(studentService.getAllStudents());
     }
+
+    @GetMapping("/getAllStudentsByProfessorId")
+    public ResponseEntity<?> getAllStudentsByProfessorId(@RequestParam Long professorId) {
+        return ResponseEntity.ok(studentService.getAllStudentsByProfessorId(professorId));
+    }
 }

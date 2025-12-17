@@ -1,6 +1,7 @@
 package com.universityscheduleproject.repository;
 
 import com.universityscheduleproject.entity.Schedule;
+import com.universityscheduleproject.entity.Student;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,9 +19,8 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     List<Schedule> findByDayOfWeek(String dayOfWeek);
 
     @Query(value = "select s.* from schedule s " +
-            "inner join course c on s.course_id = c.id " +
-            "inner join student_course sc on c.id = sc.course_id " +
-            "where sc.student_id = :studentId",
+            "join enrollments e on s.id = e.schedule_id " +
+            "where e.student_id = :studentId",
             nativeQuery = true)
     List<Schedule> getAllSchedulesByStudentId(@Param("studentId") Long studentId);
 }
